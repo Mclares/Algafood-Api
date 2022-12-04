@@ -52,10 +52,11 @@ public class EstadoController {
 	}
 
 	@PostMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.CREATED)
 	public EstadoModel adicionar(
 			@RequestBody 
 			@Valid EstadoInput estadoInput) {
+		
 		Estado estado = estadoInputDisassembler.toDomainObject(estadoInput);
 		return estadoModelAssembler.toModel(cadastroEstadoService.salvar(estado));
 	}
@@ -65,6 +66,7 @@ public class EstadoController {
 			@PathVariable Long estadoId, 
 			@RequestBody 
 			@Valid EstadoInput estadoInput) {
+		
 		Estado estadoAtual = cadastroEstadoService.buscarOuFalhar(estadoId);
 		estadoInputDisassembler.copyToDomainObject(estadoInput, estadoAtual);
 		return estadoModelAssembler.toModel(cadastroEstadoService.salvar(estadoAtual));
@@ -75,5 +77,4 @@ public class EstadoController {
 	public void remover(@PathVariable Long estadoId) {
 		cadastroEstadoService.excluir(estadoId);
 	}
-
 }

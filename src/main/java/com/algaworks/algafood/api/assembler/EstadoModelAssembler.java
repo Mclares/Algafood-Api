@@ -17,7 +17,6 @@ public class EstadoModelAssembler {
 	private ModelMapper modelMapper;
 	
 	public EstadoModel toModel(Estado estado) {
-		
 		return modelMapper.map(estado, EstadoModel.class);
 	}
 	
