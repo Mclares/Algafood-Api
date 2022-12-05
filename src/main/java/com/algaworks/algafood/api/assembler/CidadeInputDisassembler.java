@@ -15,7 +15,6 @@ public class CidadeInputDisassembler {
 	private ModelMapper modelMapper;
 	
 	public Cidade toDomainObject(CidadeInput cidadeInput) {
-		
 		return modelMapper.map(cidadeInput, Cidade.class);
 	}
 	

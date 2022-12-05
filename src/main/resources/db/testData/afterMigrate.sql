@@ -67,4 +67,9 @@ insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Esp
 
 insert into grupo (nome) values ('Gerente'), ('Vendedor'), ('Secretária'), ('Cadastrador'), ('Funcionário');
 
+insert into usuario (id, nome, email, senha, data_cadastro) values (1, 'João da Silva', 'joao@gmail.com', '123', utc_timestamp);
+insert into usuario (id, nome, email, senha, data_cadastro) values (2, 'Maria das Couves', 'maria@gmail.com', '123', utc_timestamp);
+insert into usuario (id, nome, email, senha, data_cadastro) values (3, 'José de Souza', 'jose@gmail.com', '123', utc_timestamp);
+insert into usuario (id, nome, email, senha, data_cadastro) values (4, 'Jorge Araújo', 'jorgao@gmail.com', '123', utc_timestamp);
+
 set foreign_key_checks = 1;

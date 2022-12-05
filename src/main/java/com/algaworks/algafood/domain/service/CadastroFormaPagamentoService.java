@@ -22,7 +22,6 @@ public class CadastroFormaPagamentoService {
 
 	@Transactional
 	public FormaPagamento salvar(FormaPagamento formaPagamento) {
-
 		return formaPagamentoRepository.save(formaPagamento);
 	}
 

@@ -61,7 +61,8 @@ create table restaurante_forma_pagamento (
 create table usuario (
 	id bigint not null auto_increment, 
     data_cadastro datetime not null, 
-    nome varchar(80) not null, 
+    nome varchar(80) not null,
+    email varchar(80) not null, 
     senha varchar(255) not null, 
     
     primary key (id)
