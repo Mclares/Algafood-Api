@@ -56,8 +56,7 @@ public class CidadeController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public CidadeModel adicionar(
-			@RequestBody 
-			@Valid CidadeInput cidadeInput) {
+			@RequestBody @Valid CidadeInput cidadeInput) {
 
 		try {
 			Cidade cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);

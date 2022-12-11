@@ -45,4 +45,10 @@ public class CadastroFormaPagamentoService {
 				.findById(formaPagamentoId)
 				.orElseThrow(() -> new FormaPagamentoNaoEncontrada(formaPagamentoId));
 	}
+	
+//	public FormaPagamento buscarFormaPagamentoDeRestaurante(Long restauranteId, Long formaPagamentoId) {
+//		return formaPagamentoRepository
+//				.find(restauranteId, formaPagamentoId)
+//				.orElseThrow(() -> new FormaPagamentoDeRestauranteNaoEncontrada(restauranteId, formaPagamentoId));
+//	}	
 }

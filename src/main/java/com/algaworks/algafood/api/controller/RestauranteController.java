@@ -48,7 +48,7 @@ public class RestauranteController {
 		return restauranteModelAssembler
 				.toCollectionModel(restauranteRepository.findAll());
 	}
-
+	
 	@GetMapping("/{restauranteId}")
 	public RestauranteModel buscarPorId(@PathVariable Long restauranteId) {
 		

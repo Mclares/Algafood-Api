@@ -11,6 +11,4 @@ public class FormaPagamentoNaoEncontrada extends EntidadeNaoEncontradaException 
 		this(String.format("Forma de pagamento de código %d não encontrada!", 
 				formaPagamentoId));
 	}
-
-	
 }
