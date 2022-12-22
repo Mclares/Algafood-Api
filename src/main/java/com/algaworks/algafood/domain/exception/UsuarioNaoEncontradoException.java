@@ -8,6 +8,6 @@ public class UsuarioNaoEncontradoException extends EntidadeNaoEncontradaExceptio
 	}
 	
 	public UsuarioNaoEncontradoException(Long usuarioId) {
-		super(String.format("Código de usuário %d não encontrado!", usuarioId));
+		super(String.format("Usuário de código %d não encontrado!", usuarioId));
 	}
 }

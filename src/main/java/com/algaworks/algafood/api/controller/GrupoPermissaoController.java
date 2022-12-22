@@ -39,6 +39,7 @@ public class GrupoPermissaoController {
 	public void desassociarPermissao(
 			@PathVariable Long grupoId,
 			@PathVariable Long permissaoId) {
+		
 		cadastroGrupoService.dessassociarPermissao(grupoId, permissaoId);
 	}
 	

@@ -4,18 +4,26 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.algaworks.algafood.domain.exception.NegocioException;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,45 +38,90 @@ public class Pedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false)
+	private String codigo;
 	private BigDecimal subtotal;
-	
-	@Column(nullable = false)
 	private BigDecimal taxaFrete;
-	
-	@Column(nullable = false)
 	private BigDecimal valorTotal;
-	
+
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime dataCriacao;
-	
+
 	@Column(columnDefinition = "datetime")
 	private OffsetDateTime dataConfirmacao;
-	
+
 	@Column(columnDefinition = "datetime")
 	private OffsetDateTime dataCancelamento;
-	
+
 	@Column(columnDefinition = "datetime")
 	private OffsetDateTime dataEntrega;
-	
+
 	@Embedded
 	private Endereco enderecoEntrega;
-	
-	@ManyToOne
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	private FormaPagamento formaPagamento;
-	
+
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	private Restaurante restaurante;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "usuario_cliente_id", nullable = false)
 	private Usuario cliente;
-	
-	private StatusPedido statusPedido;
-	
-	@OneToMany(mappedBy = "pedido")
+
+	@Enumerated(EnumType.STRING)
+	public StatusPedido statusPedido = StatusPedido.CRIADO;
+
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
 	private List<ItemPedido> itensPedido = new ArrayList<>();
-}	
+
+	public void calcularValorTotal() {
+		getItensPedido().forEach(ItemPedido::calcularPrecoTotal);
+
+		this.subtotal = getItensPedido().stream().map(item -> item.getPrecoTotal()).reduce(BigDecimal.ZERO,
+				BigDecimal::add);
+
+		this.valorTotal = this.subtotal.add(this.taxaFrete);
+	}
+
+	public void definirFrete() {
+		setTaxaFrete(getRestaurante().getTaxaFrete());
+	}
+
+	public void atribuirPedidosAosItens() {
+		getItensPedido().forEach(item -> item.setPedido(this));
+	}
+
+	public void confirmar() {
+		setStatusPedido(StatusPedido.CONFIRMADO);
+		setDataConfirmacao(OffsetDateTime.now());
+	}
+
+	public void entregar() {
+		setStatusPedido(StatusPedido.ENTREGUE);
+		setDataEntrega(OffsetDateTime.now());
+	}
+
+	public void cancelar() {
+		setStatusPedido(StatusPedido.CANCELADO);
+		setDataCancelamento(OffsetDateTime.now());
+	}
+	
+	private void setStatusPedido(StatusPedido novoStatus) {
+		if (getStatusPedido().naoPodeAlterarPara(novoStatus)) {
+			throw new NegocioException(String.format(
+					"Status do pedido %s não pode ser alterado de %s para %s!",
+					getCodigo(), getStatusPedido().getDescricao(), 
+					novoStatus.getDescricao()));
+		}
+		this.statusPedido = novoStatus;
+	}
+	
+	// Método executado sempre antes da persistência de dados da JPA
+	@PrePersist
+	private void gerarCodigo() {
+		setCodigo(UUID.randomUUID().toString());
+	}
+}

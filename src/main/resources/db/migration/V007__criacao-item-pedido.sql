@@ -21,7 +21,7 @@ create table pedido (
     endereco_complemento varchar(80), 
     endereco_logradouro varchar(80), 
     endereco_numero varchar(20), 
-    status_pedido integer, 
+    status_pedido varchar(10) not null, 
     subtotal decimal(19,2) not null, 
     taxa_frete decimal(19,2) not null, 
     valor_total decimal(19,2) not null, 
