@@ -15,6 +15,7 @@ delete from usuario_grupo;
 delete from restaurante_usuario;
 delete from pedido;
 delete from item_pedido;
+delete from foto_produto;
 
 alter table cidade auto_increment=1;
 alter table cozinha auto_increment=1;
