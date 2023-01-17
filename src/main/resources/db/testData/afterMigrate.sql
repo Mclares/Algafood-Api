@@ -61,6 +61,15 @@ insert into restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) val
 
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (2, 1), (3, 1), (1, 2);
 
+insert into usuario (id, nome, email, senha, data_cadastro) values
+(1, 'João da Silva', 'joao.ger@algafood.com.br', '123', utc_timestamp),
+(2, 'Maria Joaquina', 'maria.vnd@algafood.com.br', '123', utc_timestamp),
+(3, 'José Souza', 'jose.aux@algafood.com.br', '123', utc_timestamp),
+(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com.br', '123', utc_timestamp),
+(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp),
+(6, 'Débora Mendonça', 'msc.09.wylde+debora@gmail.com', '123', utc_timestamp),
+(7, 'Carlos Lima', 'msc.09.wylde+carlos@gmail.com', '123', utc_timestamp);
+
 alter table produto change descricao descricao varchar(200) not null; 
 
 insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Pizza', 'pizza de calabresa', 25.99, 1, 2);
@@ -76,11 +85,6 @@ insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Esp
 
 insert into grupo (nome) values ('Gerente'), ('Vendedor'), ('Secretária'), ('Cadastrador'), ('Funcionário');
 
-insert into usuario (id, nome, email, senha, data_cadastro) values (1, 'João da Silva', 'joao@gmail.com', '123', utc_timestamp);
-insert into usuario (id, nome, email, senha, data_cadastro) values (2, 'Maria das Couves', 'maria@gmail.com', '123', utc_timestamp);
-insert into usuario (id, nome, email, senha, data_cadastro) values (3, 'José de Souza', 'jose@gmail.com', '123', utc_timestamp);
-insert into usuario (id, nome, email, senha, data_cadastro) values (4, 'Jorge Araújo', 'jorgao@gmail.com', '123', utc_timestamp);
-
 insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2,1), (3,4);
 
 insert into restaurante_usuario (restaurante_id, usuario_id) values (1, 1), (2, 2), (3,3);
@@ -88,7 +92,7 @@ insert into restaurante_usuario (restaurante_id, usuario_id) values (1, 1), (2, 
 insert into pedido (id, codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
     endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
     status_pedido, data_criacao, subtotal, taxa_frete, valor_total)
-values (1, '291daf5f-81aa-11ed-8327-025041000001', 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
+values (1, '291daf5f-81aa-11ed-8327-025041000001', 1, 6, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
 'CRIADO', utc_timestamp, 298.90, 10, 308.90);
 
 insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
@@ -100,7 +104,7 @@ values (2, 1, 2, 2, 110, 220, 'Menos picante, por favor');
 insert into pedido (id, codigo,restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, 
         endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,
         status_pedido, data_criacao, subtotal, taxa_frete, valor_total)
-values (2, '291e0319-81aa-11ed-8327-025041000001', 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+values (2, '291e0319-81aa-11ed-8327-025041000001', 4, 7, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
 'CRIADO', utc_timestamp, 79, 0, 79);
 
 insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
