@@ -16,6 +16,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,21 +45,32 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private MessageSource messageSource;
 	
 	@Override
-	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
+	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(
+			HttpMediaTypeNotAcceptableException ex,HttpHeaders headers, 
+			HttpStatus status, WebRequest request) {
+		return ResponseEntity.status(status).headers(headers).build();
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleBindException(
+			BindException ex, HttpHeaders headers, HttpStatus status,
 			WebRequest request) {
-		return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
+		return handleValidationInternal(
+				ex, ex.getBindingResult(), headers, status, request);
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
-	
-		return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+			MethodArgumentNotValidException ex,HttpHeaders headers, 
+			HttpStatus status, WebRequest request) {
+		return handleValidationInternal(
+				ex, ex.getBindingResult(), headers, status, request);
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, 
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleNoHandlerFoundException(
+			NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, 
+			WebRequest request) {
 		
 		if (ex instanceof NoHandlerFoundException) {
 			return handleNoHandlerFound((NoHandlerFoundException)
@@ -80,8 +92,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(
+			HttpMessageNotReadableException ex,HttpHeaders headers, 
+			HttpStatus status, WebRequest request) {
 		
 		Throwable rootCause = ExceptionUtils.getRootCause(ex);
 		
@@ -94,7 +107,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		} 
 		
 		ProblemType problemType = ProblemType.ERRO_SINTAXE;
-		String detail = "O corpo da requisição está inválido, verifique erro de sintaxe.";
+		String detail = "O corpo da requisição está inválido, "
+				+ "verifique erro de sintaxe.";
 		
 		Problem problem = createProblemBuilder(
 				status, problemType, detail)
@@ -115,7 +129,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		List<Problem.Object> problemObjects =  bindingResult.getAllErrors().stream()
 				.map(objectError -> {
-					String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+					String message = messageSource.getMessage(
+							objectError, LocaleContextHolder.getLocale());
 					String name = objectError.getObjectName();
 					
 					if (objectError instanceof FieldError) {
@@ -150,8 +165,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 	
-	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(
+			MethodArgumentTypeMismatchException ex,HttpHeaders headers, 
+			HttpStatus status, WebRequest request) {
 		
 		ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
 		String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s', "
@@ -166,8 +182,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 	
-	private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	private ResponseEntity<Object> handlePropertyBindingException(
+			PropertyBindingException ex,HttpHeaders headers, HttpStatus status, 
+			WebRequest request) {
 		
 		String path = joinPath(ex.getPath());
 		
@@ -183,15 +200,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 
-	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	private ResponseEntity<Object> handleInvalidFormatException(
+			InvalidFormatException ex,HttpHeaders headers, HttpStatus status, 
+			WebRequest request) {
 		
 		String path = joinPath(ex.getPath()); 
 				
 		ProblemType problemType = ProblemType.ERRO_SINTAXE;
 		String detail = String.format("A propriedade '%s' recebeu o valor '%s', "
 				+ "que é de um tipo inválido. Corrija e informe uma valor compativel "
-				+ "com o tipo %s.", path, ex.getValue(), ex.getTargetType().getSimpleName());
+				+ "com o tipo %s.", path, 
+				ex.getValue(), ex.getTargetType().getSimpleName());
 		
 		Problem problem = createProblemBuilder(
 				status, problemType, detail)
