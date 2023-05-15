@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.GrupoModel;
@@ -25,7 +26,7 @@ public interface UsuarioGrupoControllerOpenApi {
 				description = "Usuário não encontrado para o grupo",
 				content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
-	List<GrupoModel> listar(
+	CollectionModel<GrupoModel> listar(
 			@ApiParam(value = "ID de um usuário", example = "1") Long usuarioId);
 	
 	@ApiOperation("Desassocia um usuário de um grupo")
@@ -34,7 +35,7 @@ public interface UsuarioGrupoControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Usuário ou grupo não encontrado",
 				content = @Content(schema = @Schema(implementation = Problem.class))),
 	})
-	void desassociarGrupo(@ApiParam(
+	ResponseEntity<Void> desassociarGrupo(@ApiParam(
 			value = "ID de um usuário", example = "1") Long usuarioId,
 							  @ApiParam(
 			value = "ID de um grupo", example = "1") Long grupoId);
@@ -45,7 +46,7 @@ public interface UsuarioGrupoControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Usuário ou grupo não encontrado",
 				content = @Content(schema = @Schema(implementation = Problem.class))),
 	})
-	void associarGrupo(@ApiParam(
+	ResponseEntity<Void> associarGrupo(@ApiParam(
 			value = "ID de um usuário", example = "1") Long usuarioId,
 							  @ApiParam(
 			value = "ID de um grupo", example = "1") Long grupoId);

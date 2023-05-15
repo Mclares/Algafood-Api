@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.PedidoModel;
@@ -27,7 +27,7 @@ public interface PedidoControllerOpenApi {
 				name = "campos", paramType = "query", type = "string")
 	})
 	@ApiOperation("Lista os pedidos cadastrados")
-	Page<PedidoResumoModel> pesquisar(Pageable pageable, 
+	PagedModel<PedidoResumoModel> pesquisar(Pageable pageable, 
 			PedidoFilter pedidoFilter);
 	
 	@ApiImplicitParams({

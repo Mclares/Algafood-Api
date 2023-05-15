@@ -1,12 +1,12 @@
 package com.algaworks.algafood.api.controller;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,7 +33,7 @@ import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
 import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
 
 @RestController
-@RequestMapping("/forma-pagamento")
+@RequestMapping("/formas-pagamento")
 public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
 	@Autowired
@@ -49,7 +49,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 	private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<FormaPagamentoModel>> listar(
+	public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(
 			ServletWebRequest request) {
 		
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -65,7 +65,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 			return null;
 		}
 		
-		List<FormaPagamentoModel> todasFormasPagamento = formaPagamentoModelAssembler
+		CollectionModel<FormaPagamentoModel> todasFormasPagamento = formaPagamentoModelAssembler
 				.toCollectionModel(formaPagamentoRepository.findAll());
 		return ResponseEntity.ok()
 				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())

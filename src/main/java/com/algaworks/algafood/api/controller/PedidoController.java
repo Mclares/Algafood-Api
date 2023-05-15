@@ -1,14 +1,13 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +24,7 @@ import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.PedidoInput;
 import com.algaworks.algafood.api.openapi.controller.PedidoControllerOpenApi;
+import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -54,23 +54,24 @@ public class PedidoController implements PedidoControllerOpenApi {
 	
 	@Autowired
 	private PedidoInputDisassembler pedidoInputDisassembler;
+	
+	@Autowired
+	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
 	@GetMapping
-	public Page<PedidoResumoModel> pesquisar(
+	public PagedModel<PedidoResumoModel> pesquisar(
 			@PageableDefault(size = 10) Pageable pageable, PedidoFilter pedidoFilter) {
 		
-		pageable = traduzirPageable(pageable);
+		Pageable pageableTraduzido = traduzirPageable(pageable);
 		
 		Page<Pedido> pedidosPage = pedidoRepository.findAll(
-				PedidoSpecs.usandoFiltro(pedidoFilter), pageable);
+				PedidoSpecs.usandoFiltro(pedidoFilter), pageableTraduzido);
+		pedidosPage = new PageWrapper<>(pedidosPage, pageable);
 		
-		List<PedidoResumoModel> pedidosResumoModel = pedidoResumoModelAssembler
-				.toCollectionModel(pedidosPage.getContent());
+		PagedModel<PedidoResumoModel> pagedPedidosResumoModel = pagedResourcesAssembler
+				.toModel(pedidosPage, pedidoResumoModelAssembler);
 		
-		Page<PedidoResumoModel> pedidosResumoPage = new PageImpl<>(
-				pedidosResumoModel, pageable, pedidosPage.getTotalElements());
-		
-		return pedidosResumoPage;
+		return pagedPedidosResumoModel;
 	}
 	
 	@GetMapping("/{codigo}")
@@ -98,7 +99,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 	private Pageable traduzirPageable(Pageable apiPageable) {
 		var mapeamento = ImmutableMap.of(
 				"codigo", "codigo",
-				"restaurante.nome", "restaurante.nome",
+				"nomerestaurante", "restaurante.nome",
 				"nomeCliente", "cliente.nome",
 				"valorTotal", "ValorTotal" );
 		

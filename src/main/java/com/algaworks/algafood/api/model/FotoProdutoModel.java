@@ -1,12 +1,16 @@
 package com.algaworks.algafood.api.model;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+@Relation(collectionRelation = "fotos")
 @Setter
 @Getter
-public class FotoProdutoModel {
+public class FotoProdutoModel extends RepresentationModel<FotoProdutoModel>{
 
 	@ApiModelProperty(example = "579dde2c-f244-4d83-9c1b-c634aa99d3f8_Doc_Marcelo.jpeg")
 	private String nomeArquivo;

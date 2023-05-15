@@ -1,5 +1,7 @@
 package com.algaworks.algafood.api.openapi.controller;
 
+import org.springframework.http.ResponseEntity;
+
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 
 import io.swagger.annotations.Api;
@@ -19,7 +21,7 @@ public interface FluxoPedidoControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Pedido não encontrado",
 			content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
-	void confirmar(@ApiParam(value = "Código de um pedido", 
+	ResponseEntity<Void> confirmar(@ApiParam(value = "Código de um pedido", 
 			example = "291daf5f-81aa-11ed-8327-025041000001") String codigo);
 	
 	@ApiOperation("Marca um pedido como entregue por código")
@@ -28,7 +30,7 @@ public interface FluxoPedidoControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Pedido não encontrado",
 			content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
-	void entregar(@ApiParam(value = "Código de um pedido", 
+	ResponseEntity<Void> entregar(@ApiParam(value = "Código de um pedido", 
 			example = "291daf5f-81aa-11ed-8327-025041000001") String codigo);
 
 	@ApiOperation("Marca um pedido como cancelado por código")
@@ -37,6 +39,6 @@ public interface FluxoPedidoControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Pedido não encontrado",
 			content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
-	void cancelar(@ApiParam(value = "Código de um pedido", 
+	ResponseEntity<Void> cancelar(@ApiParam(value = "Código de um pedido", 
 			example = "291daf5f-81aa-11ed-8327-025041000001") String codigo);
 }

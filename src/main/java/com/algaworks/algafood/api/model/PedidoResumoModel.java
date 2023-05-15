@@ -3,13 +3,17 @@ package com.algaworks.algafood.api.model;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+@Relation(collectionRelation = "pedidos")
 @Setter
 @Getter
-public class PedidoResumoModel {
+public class PedidoResumoModel extends RepresentationModel<PedidoResumoModel> {
 
 //  Alterando o modelo de representação para 
 //  não trazer mais o ID do pedido
@@ -33,7 +37,7 @@ public class PedidoResumoModel {
 	@ApiModelProperty(example = "2023-02-19T23:26:01Z")
 	private OffsetDateTime dataCriacao;
 	
-	private RestauranteResumoModel restaurante;
-
+	private RestauranteApenasNomeModel restaurante;
+	
 	private UsuarioModel cliente;
 }

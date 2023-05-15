@@ -4,13 +4,17 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+@Relation(collectionRelation = "pedidos")
 @Setter
 @Getter
-public class PedidoModel {
+public class PedidoModel extends RepresentationModel<PedidoModel>{
 
 //  Alterando o modelo de representação para 
 //  não trazer mais o ID do pedido
@@ -43,7 +47,7 @@ public class PedidoModel {
 	@ApiModelProperty(example = "2023-02-19T23:40:01Z")
 	private OffsetDateTime dataEntrega;
 	
-	private RestauranteResumoModel restaurante;
+	private RestauranteApenasNomeModel restaurante;
 	
 	private UsuarioModel cliente;
 	

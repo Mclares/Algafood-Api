@@ -15,14 +15,19 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Links;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
+import com.algaworks.algafood.api.model.CidadeModel;
 import com.algaworks.algafood.api.model.CozinhaModel;
 import com.algaworks.algafood.api.model.PedidoModel;
+import com.algaworks.algafood.api.openapi.model.CidadesModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.CozinhasModelOpenApi;
+import com.algaworks.algafood.api.openapi.model.LinksModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.PageableModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.PedidosModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
@@ -58,9 +63,9 @@ public class SpringFoxConfig {
 		
 		return new Docket(DocumentationType.OAS_30)
 				.select()
-					.apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api"))
+					.apis(RequestHandlerSelectors.basePackage(
+							"com.algaworks.algafood.api"))
 					.paths(PathSelectors.any())
-//					.paths(PathSelectors.ant("/restaurantes/*"))
 					.build()
 				.useDefaultResponseMessages(false)
 				.globalResponses(HttpMethod.GET, globalGetResponses())
@@ -72,6 +77,7 @@ public class SpringFoxConfig {
 						URL.class, URI.class, URLStreamHandler.class,
 						Resource.class, File.class, InputStream.class)	
 				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+				.directModelSubstitute(Links.class, LinksModelOpenApi.class)
 				.alternateTypeRules(AlternateTypeRules
 						.newRule(typeResolver
 								.resolve(Page.class, CozinhaModel.class), 
@@ -80,6 +86,10 @@ public class SpringFoxConfig {
 						.newRule(typeResolver
 								.resolve(Page.class, PedidoModel.class), 
 								PedidosModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules
+						.newRule(typeResolver
+								.resolve(CollectionModel.class, CidadeModel.class), 
+								CidadesModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(
 						new Tag("Cidades", "Gerencia as cidades"),
@@ -91,7 +101,8 @@ public class SpringFoxConfig {
 						new Tag("Estados", "Gerencia os estados"),
 						new Tag("Produtos", "Gerencia os produtos de restaurantes"),
 						new Tag("Usuarios", "Gerencia os usuários"),
-						new Tag("Estatisticas", "Gerencia os indicadores"));
+						new Tag("Estatísticas", "Gerencia os indicadores"),
+						new Tag("Permissões", "Gerencia as permissões"));
 	} 
 	
 	private List<Response> globalGetResponses() {

@@ -83,16 +83,48 @@ public class Restaurante {
 		setAtivo(true);
 	}
 	
+	public boolean isAtivo() {
+		return this.ativo;
+	}
+	
 	public void inativar() {
 		setAtivo(false);
+	}
+	
+	public boolean isInativo() {
+		return !isAtivo();
 	}
 	
 	public void abrir() {
 		setAberto(true);
 	}
 	
+	public boolean isAberto() {
+		return this.aberto;
+	}
+	
 	public void fechar() {
 		setAberto(false);
+	}
+	
+	public boolean isFechado() {
+		return !isAberto();
+	}
+	
+	public boolean aberturaPermitida() {
+		return isAtivo() && isFechado();
+	}
+	
+	public boolean fechamentoPermitido() {
+		return isAtivo() && isAberto();
+	}
+	
+	public boolean ativacaoPermitida() {
+		return isInativo();
+	}
+	
+	public boolean inativacaoPermitida() {
+		return isAtivo();
 	}
 
 	public boolean desassociarFormaPagamento(FormaPagamento formaPagamento) {

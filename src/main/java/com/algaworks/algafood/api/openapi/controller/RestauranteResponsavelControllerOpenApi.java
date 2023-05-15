@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.UsuarioModel;
@@ -22,7 +23,7 @@ public interface RestauranteResponsavelControllerOpenApi {
 				description = "Restaurante não encontrado",
 				content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
-	List<UsuarioModel> listar(@ApiParam(
+	CollectionModel<UsuarioModel> listar(@ApiParam(
 			value = "ID de um restaurante", example = "1") Long restauranteId);
 	
 	@ApiOperation("Desassocia o responsável de um restaurante")
@@ -31,7 +32,7 @@ public interface RestauranteResponsavelControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
 				content = @Content(schema = @Schema(implementation = Problem.class))),
 	})
-	void desassociarResponsavel(@ApiParam(
+	ResponseEntity<Void> desassociarResponsavel(@ApiParam(
 			value = "ID de um restaurante", example = "1") Long restauranteId,
 							    @ApiParam(
 			value = "ID de um usuário", example = "1") Long usuarioId);
@@ -42,7 +43,7 @@ public interface RestauranteResponsavelControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
 		content = @Content(schema = @Schema(implementation = Problem.class))),
 	})
-	void associarResponsavel(@ApiParam(
+	ResponseEntity<Void> associarResponsavel(@ApiParam(
 			value = "ID de um restaurante", example = "1") Long restauranteId,
 			 	  @ApiParam(
 			value = "ID de um usuário", example = "1") Long usuarioId);
