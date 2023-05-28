@@ -9,31 +9,27 @@ import com.algaworks.algafood.api.model.GrupoModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "Usuarios")
 public interface UsuarioGrupoControllerOpenApi {
 	
 	@ApiOperation("Lista os usuários associados a um grupo")
 	@ApiResponses({
-		@ApiResponse(responseCode = "400", 
-				description = "ID do usuário inválido",
-				content = @Content(schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "404", 
-				description = "Usuário não encontrado para o grupo",
-				content = @Content(schema = @Schema(implementation = Problem.class)))
+		@ApiResponse(code = 400, message = "ID do usuário inválido",
+		response = Problem.class),
+		@ApiResponse(code = 404, message = "Usuário não encontrado para o grupo",
+		response = Problem.class)
 	})
 	CollectionModel<GrupoModel> listar(
 			@ApiParam(value = "ID de um usuário", example = "1") Long usuarioId);
 	
 	@ApiOperation("Desassocia um usuário de um grupo")
 	@ApiResponses({
-		@ApiResponse(responseCode = "204", description = "Usuário desassociado de grupo"),
-		@ApiResponse(responseCode = "404", description = "Usuário ou grupo não encontrado",
-				content = @Content(schema = @Schema(implementation = Problem.class))),
+		@ApiResponse(code = 204, message = "Usuário desassociado de grupo"),
+		@ApiResponse(code = 404, message = "Usuário ou grupo não encontrado",
+		response = Problem.class)
 	})
 	ResponseEntity<Void> desassociarGrupo(@ApiParam(
 			value = "ID de um usuário", example = "1") Long usuarioId,
@@ -42,9 +38,9 @@ public interface UsuarioGrupoControllerOpenApi {
 	
 	@ApiOperation("Associa um usuário a um grupo")
 	@ApiResponses({
-		@ApiResponse(responseCode = "204", description = "Usuário associado ao grupo"),
-		@ApiResponse(responseCode = "404", description = "Usuário ou grupo não encontrado",
-				content = @Content(schema = @Schema(implementation = Problem.class))),
+		@ApiResponse(code = 204, message = "Usuário associado de grupo"),
+		@ApiResponse(code = 404, message = "Usuário ou grupo não encontrado",
+		response = Problem.class)
 	})
 	ResponseEntity<Void> associarGrupo(@ApiParam(
 			value = "ID de um usuário", example = "1") Long usuarioId,

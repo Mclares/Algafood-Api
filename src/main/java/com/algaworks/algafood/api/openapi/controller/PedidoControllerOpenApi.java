@@ -14,10 +14,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "Pedidos")
 public interface PedidoControllerOpenApi {
@@ -26,7 +24,7 @@ public interface PedidoControllerOpenApi {
 		@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
 				name = "campos", paramType = "query", type = "string")
 	})
-	@ApiOperation("Lista os pedidos cadastrados")
+	@ApiOperation(value = "Lista os pedidos cadastrados")
 	PagedModel<PedidoResumoModel> pesquisar(Pageable pageable, 
 			PedidoFilter pedidoFilter);
 	
@@ -36,12 +34,10 @@ public interface PedidoControllerOpenApi {
 	})
 	@ApiOperation("Busca um pedido por codigo")
 	@ApiResponses({
-		@ApiResponse(responseCode = "400", 
-				description = "codigo do pedido inválido", 
-				content = @Content(schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "404", 
-				description = "Pedido não encontrado",
-				content = @Content(schema = @Schema(implementation = Problem.class)))
+		@ApiResponse(code = 400, message = "Código do pedido inválido", 
+		response = Problem.class),
+		@ApiResponse(code = 404, message = "Pedido não encontrado", 
+		response = Problem.class)
 	})
 	PedidoModel buscarPorCodigo(
 			@ApiParam(value = "Codigo de um pedido", 
@@ -50,9 +46,9 @@ public interface PedidoControllerOpenApi {
 
 	@ApiOperation("Cadastra um novo pedido")
 	@ApiResponses({
-		 @ApiResponse(responseCode = "201", description = "Pedido cadastrado")
+		@ApiResponse(code = 201, message = "Pedido cadastrado")
 	})
 	PedidoModel adicionar(
 			@ApiParam(name = "Corpo", 
 			value = "Representação de um novo pedido") PedidoInput pedidoInput);
-	}
+}

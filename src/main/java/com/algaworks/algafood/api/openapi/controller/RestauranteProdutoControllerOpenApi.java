@@ -9,22 +9,18 @@ import com.algaworks.algafood.api.model.input.ProdutoInput;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "Produtos")
 public interface RestauranteProdutoControllerOpenApi {
 
 	@ApiOperation("Lista os produtos cadastrados para os restaurantes")
 	@ApiResponses({
-		@ApiResponse(responseCode = "400", 
-				description = "ID do restaurante inválido", 
-				content = @Content(schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "404", 
-				description = "Restaurante não encontrado",
-				content = @Content(schema = @Schema(implementation = Problem.class)))
+		@ApiResponse(code = 400, message = "ID do restaurante inválido",
+		response = Problem.class),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado",
+		response = Problem.class)
 	})
 	CollectionModel<ProdutoModel> listar(
 		@ApiParam(value = "ID de um restaurante", example = "1") Long restauranteId,
@@ -34,12 +30,10 @@ public interface RestauranteProdutoControllerOpenApi {
 	
 	@ApiOperation("Busca um produto de um restaurante")
 	@ApiResponses({
-		@ApiResponse(responseCode = "400", 
-				description = "ID do produto ou restaurante inválido", 
-				content = @Content(schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "404", 
-				description = "Produto de restaurante não encontrado",
-				content = @Content(schema = @Schema(implementation = Problem.class)))
+		@ApiResponse(code = 400, message = "ID do produto ou restaurante inválido",
+		response = Problem.class),
+		@ApiResponse(code = 404, message = "Produto de restaurante não encontrado",
+		response = Problem.class)
 	})
 	ProdutoModel buscarPorId(
 		@ApiParam(value = "ID de um restaurante", example = "1") Long restauranteId,
@@ -47,10 +41,9 @@ public interface RestauranteProdutoControllerOpenApi {
 
 	@ApiOperation("Cadastra um novo produto")
 	@ApiResponses({
-		@ApiResponse(responseCode = "201", description = "Produto cadastrado"),
-		@ApiResponse(responseCode = "404", 
-		description = "Restaurante não encontrado",
-		content = @Content(schema = @Schema(implementation = Problem.class)))
+		@ApiResponse(code = 201, message = "Produto cadastrado"),
+		@ApiResponse(code = 404, message = "Produto ou restaurante não encontrado",
+		response = Problem.class)
 	})
 	ProdutoModel adicionar(
 		@ApiParam(value = "ID de um restaurante", example = "1") Long restauranteId,
@@ -59,10 +52,9 @@ public interface RestauranteProdutoControllerOpenApi {
 	
 	@ApiOperation("Atualiza um produto de um restaurante")
 	@ApiResponses({
-		@ApiResponse(responseCode = "200", description = "Produto atualizado"),
-		@ApiResponse(responseCode = "404", 
-				description = "Produto ou restaurante não encontrado",
-				content = @Content(schema = @Schema(implementation = Problem.class)))
+		@ApiResponse(code = 200, message = "Produto atualizado"),
+		@ApiResponse(code = 404, message = "Produto ou restaurante não encontrado",
+		response = Problem.class)
 	})
 	ProdutoModel atualizar(
 			@ApiParam(value = "ID de um restaurante", example = "1") Long restauranteId,
