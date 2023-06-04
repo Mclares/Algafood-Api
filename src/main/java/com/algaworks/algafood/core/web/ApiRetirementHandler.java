@@ -14,7 +14,7 @@ public class ApiRetirementHandler implements HandlerInterceptor {
 	public boolean preHandle(
 			HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		if (request.getRequestURI().startsWith("/v1/")) {
+		if (request.getRequestURI().startsWith("/v2/")) {
 //			response.addHeader("X-Algafood-Deprecated", 
 //					"Esta versão da API está depreciada e deixará de existir à "
 //					+ "partir 01/07/2023. Use a versão mais atual da API.");

@@ -75,7 +75,7 @@ public class SpringFoxConfig {
 		return objectMapper -> objectMapper.registerModule(new JavaTimeModule());
 	}
 
-//	@Bean
+	@Bean
 	public Docket apiDocketV1() {
 		var typeResolver = new TypeResolver();
 
@@ -200,16 +200,17 @@ public class SpringFoxConfig {
 	}
 
 	private ApiInfo apiInfoV1() {
-		return new ApiInfoBuilder().title("Algafood Api (Depreciada)")
-				.description("Api aberta para clientes e restaurantes.<br>"
-						+ "<strong>Esta versão da API está depreciada e deixará de existir à partir 01/07/2023."
-						+ " Use a versão mais atual da API.</strong>")
+		return new ApiInfoBuilder().title("Algafood Api")
+				.description("Api aberta para clientes e restaurantes")
 				.version("1.0").contact(new Contact("Algafood", "https://www.algafood.com", "contato@algafood.com"))
 				.build();
 	}
 
 	private ApiInfo apiInfoV2() {
-		return new ApiInfoBuilder().title("Algafood Api").description("Api aberta para clientes e restaurantes")
+		return new ApiInfoBuilder().title("Algafood Api (Depreciada)")
+				.description("Api aberta para clientes e restaurantes.<br>"
+						+ "<strong>Esta versão da API está depreciada e deixará de existir à partir 01/07/2023."
+						+ " Use a versão mais atual da API.</strong>")
 				.version("2.0").contact(new Contact("Algafood", "https://www.algafood.com", "contato@algafood.com"))
 				.build();
 	}
