@@ -21,13 +21,9 @@ public class Cidade {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-//	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 	
-//	@Valid
-//	@ConvertGroup(from = Default.class, to = Groups.estadoId.class)
-//	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "estado_id", nullable = false)
 	private Estado estado;
