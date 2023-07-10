@@ -26,6 +26,8 @@ import com.algaworks.algafood.api.v1.model.input.PedidoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
+import com.algaworks.algafood.core.security.AlgaSecurity;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
@@ -57,7 +59,12 @@ public class PedidoController implements PedidoControllerOpenApi {
 	
 	@Autowired
 	private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
+	@CheckSecurity.Pedidos.PodePesquisar
+	@Override
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(
 			@PageableDefault(size = 10) Pageable pageable, PedidoFilter pedidoFilter) {
@@ -74,21 +81,25 @@ public class PedidoController implements PedidoControllerOpenApi {
 		return pagedPedidosResumoModel;
 	}
 	
+	@CheckSecurity.Pedidos.PodeBuscar
+	@Override
 	@GetMapping("/{codigo}")
 	public PedidoModel buscarPorCodigo(@PathVariable String codigo) {
 		return pedidoModelAssembler.toModel(cadastroPedidoService
 				.buscarOuFalhar(codigo));
 	}
-	
+
+	@CheckSecurity.Pedidos.PodeCriar
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoModel adicionar(@Valid @RequestBody PedidoInput pedidoInput) {
 		
 		try {
 			Pedido novoPedido = pedidoInputDisassembler.toDomainModel(pedidoInput);
+			
 			// Pegar usuário autenticado
 			novoPedido.setCliente(new Usuario());
-			novoPedido.getCliente().setId(1L);
+			novoPedido.getCliente().setId(algaSecurity.getUsuarioId());
 			
 			return pedidoModelAssembler.toModel(cadastroPedidoService.salvar(novoPedido));
 		} catch (EntidadeNaoEncontradaException e) {

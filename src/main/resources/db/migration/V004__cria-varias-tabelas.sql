@@ -28,9 +28,9 @@ create table permissao (
 create table produto (
 	id bigint not null auto_increment, 
     ativo bit not null, 
-    descricao varchar(80) not null, 
+    descricao text not null, 
     nome varchar(255) not null, 
-    preco decimal(19,2) not null, 
+    preco decimal(10,2) not null, 
     restaurante_id bigint not null, 
     
     primary key (id)
