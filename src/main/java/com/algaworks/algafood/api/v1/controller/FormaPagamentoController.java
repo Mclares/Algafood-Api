@@ -28,6 +28,7 @@ import com.algaworks.algafood.api.v1.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.api.v1.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.v1.model.input.FormaPagamentoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.FormaPagamentoControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
 import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
@@ -47,7 +48,9 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 
 	@Autowired
 	private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
-
+	
+	@CheckSecurity.FormasPagamento.PodeConsultar
+	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(
 			ServletWebRequest request) {
@@ -73,6 +76,8 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 				.body(todasFormasPagamento);
 	}	
 
+	@CheckSecurity.FormasPagamento.PodeConsultar
+	@Override
 	@GetMapping(value = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<FormaPagamentoModel> buscarporId(
 			@PathVariable Long formaPagamentoId, ServletWebRequest request) {
@@ -97,6 +102,8 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 				.body(formaPagamento);
 	}
 
+	@CheckSecurity.FormasPagamento.PodeGerenciarFormaPagamento
+	@Override
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public FormaPagamentoModel adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
@@ -105,6 +112,8 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 		return formaPagamentoModelAssembler.toModel(cadastroFormaPagamentoService.salvar(formaPagamento));
 	}
 
+	@CheckSecurity.FormasPagamento.PodeGerenciarFormaPagamento
+	@Override
 	@PutMapping(value = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public FormaPagamentoModel atualizar(
 			@PathVariable Long formaPagamentoId,
@@ -118,6 +127,8 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 				.toModel(cadastroFormaPagamentoService.salvar(formaPagamentoAtual));
 	}
 
+	@CheckSecurity.FormasPagamento.PodeGerenciarFormaPagamento
+	@Override
 	@DeleteMapping(value = "/{formaPagamentoId}", produces = {})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long formaPagamentoId) {

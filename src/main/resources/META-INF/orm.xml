@@ -25,7 +25,7 @@
     	from Pedido ped
     	join ped.restaurante rest
     	join rest.usuarios resp
-    	where ped.codigo = :codigoPedido 
+    	where ped.codigo = :codigo
     	and resp.id = :usuarioId
     	</query>
 	</named-query>
